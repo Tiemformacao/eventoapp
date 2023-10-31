@@ -1,0 +1,15 @@
+Spring Boot Web
+JPA
+Driver MYSQL
+Thymeleaf
+Materealize
+
+
+
+1º IndexController;
+2º Index.html
+3º EventoController
+4º FormEvento.html
+5º Evento
+6º EventoRepository
+7º 
