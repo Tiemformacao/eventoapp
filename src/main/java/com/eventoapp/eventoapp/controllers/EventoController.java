@@ -67,6 +67,33 @@ public class EventoController {
 		return mv;
 	}
 	
+	@RequestMapping("/deletarEvento")
+	public String deletarEvento (Long codigo) {
+		Evento evento = er.findByCodigo(codigo);
+		
+		//Apagar os convidados. Apagar só o Evento não dá certo. Aparece erro de chave estrangeira.
+		if(cr.findByEvento(evento) != null) {
+			Iterable<Convidado> convidados = cr.findByEvento(evento);
+			cr.deleteAll(convidados);
+		}
+		
+		er.delete(evento);
+		return "redirect:/eventos";
+	}
+	
+	@RequestMapping("/deletar")
+	public String deletarConvidado(String rg) {
+		Convidado convidado = cr.findByRg(rg);
+		cr.delete(convidado);
+		
+		Evento evento = convidado.getEvento();
+		Long codigoLong = evento.getCodigo();
+		String codigo = "" + codigoLong;
+		
+		return "redirect:/" + codigo;
+	}
+	
+	
 	@RequestMapping(value="/{codigo}", method=RequestMethod.POST)
 	public String detalhesEventoPost (@PathVariable("codigo") Long codigo, @Valid Convidado convidado, BindingResult result, RedirectAttributes attributes) {
 		if(result.hasErrors()) {
